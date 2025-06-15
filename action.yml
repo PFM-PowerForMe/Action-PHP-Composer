@@ -76,6 +76,10 @@ inputs:
   container_workdir:
     description: "Sets the application workdir inside container"
     required: false
+  
+  php_cache_arch:
+    description: "php build cache container tag"
+    required: true
 
 outputs:
   full_command:
@@ -86,6 +90,7 @@ runs:
   using: "composite"
   steps:
     - env:
+        PHP_CACHE_ARCH: ${{ inputs.php_cache_arch }}
         ACTION_VERSION: ${{ inputs.version }}
         ACTION_PHP_VERSION: ${{ inputs.php_version }}
         ACTION_PHP_EXTENSIONS: ${{ inputs.php_extensions }}
@@ -107,7 +112,7 @@ runs:
       id: composer_run
       run: |
         set -e
-        bash <(curl -s https://raw.githubusercontent.com/php-actions/php-build/v2/php-build.bash) composer
+        bash <(curl -s https://raw.githubusercontent.com/pfm-powerforme/php-build/refs/heads/master/php-build.bash) composer
         ${{ github.action_path }}/composer-action.bash
       shell: bash
 
